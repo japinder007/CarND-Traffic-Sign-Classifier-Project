@@ -61,3 +61,56 @@ Dropout | Training keep_prob = 0.4
 Fully Connected | outputs 512
 Dropout | Training keep_prob = 0.4
 Fully Connected | outputs 43
+
+## 3. Model Training
+I used the following parameters to train the model
+	* Learning Rate - 0.0003
+	* Dropout (during training) - 0.4
+	* Epochs - 50
+	* Batch size - 64
+
+## 4. Imporving Validation accuracy.
+
+The first model I started with was the Lenet model. This was a simple model and I wanted to use that as a baseline. I trained the first model and it gave me a validation accuracy of about 84%. I then thought of making the model more powerful and overfit the data and then use dropout to reduce the overfitting. Towards that, I added one additional layer to Lenet, made the FC layers wider and then added two dropout layers after each of the FC layer. With this architecture I got a validation accuracy of about 94%. I chose Lenet because of its simplicity and regular structure and believed that we could build powerful models by adding more layers.
+
+At that point I added augmentation where I sampled 200 images for each class and then generated 10 augmentations of each. I added 2000 images/class to the training set and trained on the augmented training set. This pushed the validation accuracy above 96%. However, these are just the final results. For each configuration I experimented with a lot of values of learning rate and drop out. I tried dropout in the range [0.4, 0.9] and learning rates in the range [0.0001 to 0.002]. 
+
+**My final model results were:**
+
+* training set accuracy of 99.6%
+* validation set accuracy of 96.2%
+* test set accuracy of 94.1%
+	
+Overall the high validation accuracy suggests that the model is doing quite welland is not overfitting. The test accuracy could be a bit higher. More augmentation of classes for which we have fewer data can help. There is scope for improvement though and for future work, the model proposed by Yann Lecun with skip connections can be used.
+
+Here are the training and validation accuracy as a function of epoch.
+![accuracy](report/training_test_accuracy.png)
+![loss](report/training_validation_loss.png)
+
+## 4. Testing Model on New Images
+
+Here are five German traffic signs that I found on the web:
+
+![bumpy](32x32/bumpy_32x32.png)
+![doppel_kurve](32x32/DoppelKurve_32x32.png)
+![no_passing](32x32/no_passing_32x32.png)
+![slippery](32x32/slippery_32x32.png)
+![speed60](32x32/speed_60_32x32.png)
+
+I tried to test on different classes of images. The slippery image and the bumpy image are similar and might be difficult to distinguish. The model was able to predict all of them correctly with an accuracy of 100%, giving a lot of confidence in the model.
+
+Here are the plot of the predicted probabilities for the test images.
+
+![bumpy_prob](report/bumpy_prob.png)
+![doppel_kurve_prob](report/double_curve_prob.png)
+![no_passing_prob](report/no_passing_prob.png)
+![slippery_prob](report/slippery_prob.png)
+![speed60_prob](report/speed_60_prob.png)
+
+For all but the last image, the model predicts with almost full certainty the correct class of the image. For the speed 60 case, the model also has slight probability on the speed 30 limit (prob=0.1), compared to the speed 60 case (0.9). 
+
+## 5. Visualization
+
+I implemented the visualization section and visualized the output of one of the conv layers (conv2d). The feature map for this layer shows that the model is focused on identifying the circle within which the 60 is written ans also the contours of the 6 and 0. The visualization is shown below.
+
+![visualization](report/visualization.png)
